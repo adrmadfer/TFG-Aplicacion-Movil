@@ -144,6 +144,12 @@ const ShowRegistro = ({navigation, route}) => {
             <>
                 <Layout>
 
+                    <View>
+                        <Text>{fechaString}</Text>
+                    </View>
+
+
+
                     {registro && Object.entries(registro).length !== 0 &&
 
                     <View style={styles.container}>
