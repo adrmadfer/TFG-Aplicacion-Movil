@@ -4,6 +4,7 @@ import {useIsFocused} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const ShowAuxiliar = ({navigation, route}) => {
 
@@ -13,7 +14,7 @@ const ShowAuxiliar = ({navigation, route}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/users/auxiliares/show/${id}`,
+        await axios.get(`http://${baseURL}:3001/users/auxiliares/show/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setAuxiliar(response.data);
@@ -22,7 +23,7 @@ const ShowAuxiliar = ({navigation, route}) => {
 
     const deleteAuxiliar = async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete(`http://192.168.1.220:3001/users/auxiliares/delete/${id}`,
+        await axios.delete(`http://${baseURL}:3001/users/auxiliares/delete/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 if (response.data.error) {

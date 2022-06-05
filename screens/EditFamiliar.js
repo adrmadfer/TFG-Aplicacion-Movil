@@ -6,6 +6,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const EditFamiliar = ({route}) => {
 
@@ -15,7 +16,7 @@ const EditFamiliar = ({route}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/users/familiares/show/${id}`,
+        await axios.get(`http://${baseURL}:3001/users/familiares/show/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setFamiliar(response.data);
@@ -49,7 +50,7 @@ const EditFamiliar = ({route}) => {
         }
 
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.put(`http://192.168.1.220:3001/users/familiares/edit/${id}`, data,
+        await axios.put(`http://${baseURL}:3001/users/familiares/edit/${id}`, data,
             {headers: {accessToken: token}})
             .then((response) => {
                 if(response.data.error) {

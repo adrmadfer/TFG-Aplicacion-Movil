@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "./Layout";
 import Auxiliar from "../components/Auxiliar";
 import AuxiliarDisponible from "../components/AuxiliarDisponible";
+import {baseURL} from "../helpers/IPConfig";
 
 const AuxiliaresDisponibles = ({route}) => {
 
@@ -15,7 +16,7 @@ const AuxiliaresDisponibles = ({route}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/users/personaDependiente/${id}/listAuxiliaresDisponibles`,
+        await axios.get(`http://${baseURL}:3001/users/personaDependiente/${id}/listAuxiliaresDisponibles`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setListOfAuxiliaresDisponibles(response.data);

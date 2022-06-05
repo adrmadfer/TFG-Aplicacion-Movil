@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Auxiliar from "../components/Auxiliar";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const GestionarAuxiliares = ({navigation}) => {
 
@@ -13,7 +14,7 @@ const GestionarAuxiliares = ({navigation}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get('http://192.168.1.220:3001/users/auxiliares/list',
+        await axios.get(`http://${baseURL}:3001/users/auxiliares/list`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setLista(response.data)

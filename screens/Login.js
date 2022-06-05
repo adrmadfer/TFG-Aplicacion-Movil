@@ -4,6 +4,7 @@ import Layout from "./Layout";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext, getValue, setValue, getV} from "../helpers/AuthContext";
+import {baseURL} from "../helpers/IPConfig";
 
 
 const Login = ({navigation}) => {
@@ -23,7 +24,7 @@ const Login = ({navigation}) => {
 
     const login = async () => {
         const data = { username: username, password: password };
-        await axios.post("http://192.168.1.220:3001/users/login", data)
+        await axios.post(`http://${baseURL}:3001/users/login`, data)
             .then((response) => {
                 if(response.data.error) {
                     alert(response.data.error)

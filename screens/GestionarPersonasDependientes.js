@@ -1,23 +1,37 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {StyleSheet, Text, FlatList, Pressable, TouchableOpacity} from 'react-native'
 import axios from "axios";
 import PersonaDependiente from "../components/PersonaDependiente";
 import Layout from "./Layout";
 import { useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {baseURL} from "../helpers/IPConfig";
+import {AuthContext} from "../helpers/AuthContext";
 
 const GestionarPersonasDependientes = ({navigation}) => {
 
+    const { authState } = useContext(AuthContext);
     const [lista, setLista] = useState([])
     const isFocused = useIsFocused();
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get('http://192.168.1.220:3001/personasDependientes',
-            {headers: {accessToken: token}})
-            .then((response) => {
-                setLista(response.data)
-            }).catch((e) => console.log(e))
+
+        if(authState.rol === "COORDINADOR") {
+            await axios.get(`http://${baseURL}:3001/personasDependientes`,
+                {headers: {accessToken: token}})
+                .then((response) => {
+                    setLista(response.data)
+                }).catch((e) => console.log(e))
+        } else {
+            axios.get(`http://${baseURL}:3001/personasDependientes/personasAsignadas/`,
+                {headers: {accessToken: token}})
+                .then((response) => {
+                    setLista(response.data);
+
+                }).catch((e) => console.log(e))
+        }
+
     }, [isFocused])
 
     const renderItem = ({item}) => {
@@ -26,9 +40,13 @@ const GestionarPersonasDependientes = ({navigation}) => {
 
     return (
         <Layout>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CreatePersonaDependiente")}>
-                <Text style={styles.text}>Añadir</Text>
-            </TouchableOpacity>
+
+            {authState.rol === "COORDINADOR" && (
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CreatePersonaDependiente")}>
+                    <Text style={styles.text}>Añadir</Text>
+                </TouchableOpacity>
+            )}
+
             <FlatList style={{
                 width: '90%',
                 marginVertical: '5%'

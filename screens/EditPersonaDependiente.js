@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const EditPersonaDependiente = ({navigation, route}) => {
 
@@ -13,7 +14,7 @@ const EditPersonaDependiente = ({navigation, route}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/personasDependientes/show/${id}`,
+        await axios.get(`http://${baseURL}:3001/personasDependientes/show/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setPersonaDependiente(response.data);
@@ -49,7 +50,7 @@ const EditPersonaDependiente = ({navigation, route}) => {
         }
 
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.put(`http://192.168.1.220:3001/personasDependientes/edit/${id}`, data,
+        await axios.put(`http://${baseURL}:3001/personasDependientes/edit/${id}`, data,
             {headers: {accessToken: token}})
             .then((response) => {
                 if(response.data.error) {

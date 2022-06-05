@@ -6,6 +6,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {baseURL} from "../helpers/IPConfig";
 
 const CreatePersonaDependiente = ({navigation}) => {
 
@@ -37,7 +38,7 @@ const CreatePersonaDependiente = ({navigation}) => {
             pastillasNoche: values.pastillasNoche,
         }
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.post("http://192.168.1.220:3001/personasDependientes/create", data,
+        await axios.post(`http://${baseURL}:3001/personasDependientes/create`, data,
             {headers: {accessToken: token}})
             .then((response) => {
                 if(response.data.error) {

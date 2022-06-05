@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Familiar from "../components/Familiar";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const GestionarFamiliares = () => {
 
@@ -14,7 +15,7 @@ const GestionarFamiliares = () => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get('http://192.168.1.220:3001/users/familiares/list',
+        await axios.get(`http://${baseURL}:3001/users/familiares/list`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setLista(response.data)

@@ -18,6 +18,13 @@ import GestionarFamiliares from "../screens/GestionarFamiliares";
 import CreateFamiliar from "../screens/CreateFamiliar";
 import ShowFamiliar from "../screens/ShowFamiliar";
 import EditFamiliar from "../screens/EditFamiliar";
+import CreateRegistro from "../screens/CreateRegistro";
+import CreateObservacion from "../screens/CreateObservacion";
+import CreateAviso from "../screens/CreateAviso";
+import Observaciones from "../screens/Observaciones";
+import Avisos from "../screens/Avisos";
+import ShowRegistro from "../screens/ShowRegistro";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -71,6 +78,49 @@ const GestionarPersonasDependientesStack = () => {
             <Stack.Screen
                 name="ShowFamiliar"
                 component={ShowFamiliar}
+            />
+
+            <Stack.Screen options={{
+                title: "Iniciar Registro diario",
+            }}
+                          name="CreateRegistro"
+                          component={CreateRegistro}
+            />
+
+            <Stack.Screen options={{
+                title: "Añadir Observación",
+            }}
+                          name="CreateObservacion"
+                          component={CreateObservacion}
+            />
+
+            <Stack.Screen options={{
+                title: "Ver observaciones",
+            }}
+                          name="Observaciones"
+                          component={Observaciones}
+            />
+
+
+            <Stack.Screen options={{
+                title: "Añadir aviso",
+            }}
+                          name="CreateAviso"
+                          component={CreateAviso}
+            />
+
+            <Stack.Screen options={{
+                title: "Ver avisos",
+            }}
+                          name="Avisos"
+                          component={Avisos}
+            />
+
+            <Stack.Screen options={{
+                title: "Ver Registros diarios",
+            }}
+                          name="ShowRegistro"
+                          component={ShowRegistro}
             />
         </Stack.Navigator>
     );

@@ -8,6 +8,7 @@ import PersonaDependiente from "../components/PersonaDependiente";
 import Auxiliar from "../components/Auxiliar";
 import {Touchable} from "react-native-web";
 import AuxiliarAsignado from "../components/AuxiliarAsignado";
+import {baseURL} from "../helpers/IPConfig";
 
 const AuxiliaresAsignados = ({id}) => {
 
@@ -17,7 +18,7 @@ const AuxiliaresAsignados = ({id}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/userPersonaDependiente/list/${id}`,
+        await axios.get(`http://${baseURL}:3001/userPersonaDependiente/list/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setListOfAuxiliaresAsignados(response.data)
@@ -27,7 +28,7 @@ const AuxiliaresAsignados = ({id}) => {
 
     const deleteUserPersonaDependiente = async (auxiliarId, id) => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete("http://192.168.1.220:3001/userPersonaDependiente/delete",
+        await axios.delete(`http://${baseURL}:3001/userPersonaDependiente/delete`,
             {headers: {accessToken: token},
                 data: {
                     userId: auxiliarId,

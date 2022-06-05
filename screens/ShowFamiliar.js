@@ -4,6 +4,7 @@ import {useIsFocused, useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Layout from "./Layout";
+import {baseURL} from "../helpers/IPConfig";
 
 const ShowFamiliar = ({route}) => {
 
@@ -14,7 +15,7 @@ const ShowFamiliar = ({route}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/users/familiares/show/${id}`,
+        await axios.get(`http://${baseURL}:3001/users/familiares/show/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setFamiliar(response.data);
@@ -23,7 +24,7 @@ const ShowFamiliar = ({route}) => {
 
     const deleteFamiliar = async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete(`http://192.168.1.220:3001/users/familiares/delete/${id}`,
+        await axios.delete(`http://${baseURL}:3001/users/familiares/delete/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 if (response.data.error) {

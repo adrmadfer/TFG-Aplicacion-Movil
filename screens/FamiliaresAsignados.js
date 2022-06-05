@@ -4,6 +4,7 @@ import Layout from "./Layout";
 import {useIsFocused, useNavigation} from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {baseURL} from "../helpers/IPConfig";
 
 const FamiliaresAsignados = ({id}) => {
 
@@ -13,7 +14,7 @@ const FamiliaresAsignados = ({id}) => {
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.get(`http://192.168.1.220:3001/userPersonaDependiente/familiares/list/${id}`,
+        await axios.get(`http://${baseURL}:3001/userPersonaDependiente/familiares/list/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setListOfFamiliaresAsignados(response.data)
@@ -22,7 +23,7 @@ const FamiliaresAsignados = ({id}) => {
 
     const deleteUserPersonaDependiente = async (familiarId, id) => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete("http://192.168.1.220:3001/userPersonaDependiente/delete",
+        await axios.delete(`http://${baseURL}:3001/userPersonaDependiente/delete`,
             {headers: {accessToken: token},
                 data: {
                     userId: familiarId,
