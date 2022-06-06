@@ -19,6 +19,8 @@ const ShowPersonaDependiente = ({navigation, route}) => {
     const id = route.params.id
     const isFocused = useIsFocused();
 
+    const [aviso, setAviso] = useState(0)
+
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
 
@@ -43,22 +45,29 @@ const ShowPersonaDependiente = ({navigation, route}) => {
             }).catch((e) => console.log(e))
     }, [isFocused])
 
-
+/*
     //Mostrar notificación de una nueva observación al familiar
-    if (Object.values(notificacion).at(1) && authState.rol === "FAMILIAR") {
+    if (Object.values(notificacion).at(1) && authState.rol === "FAMILIAR" && aviso.valueOf() === 0) {
         Swal.fire({
             icon: "info", title: "INFORMACIÓN",
             text: "Hay nuevas observaciones"
-        })
+        }).then(() =>
+            setAviso(1)
+        )
     }
 
     //Mostrar notificación de un nuevo aviso al auxiliar
-    if (Object.values(notificacionAviso).at(1) && authState.rol === "AUXILIAR") {
+    if (Object.values(notificacionAviso).at(1) && authState.rol === "AUXILIAR" && aviso.valueOf() === 0) {
         Swal.fire({
             icon: "info", title: "INFORMACIÓN",
             text: "Hay un nuevo aviso"
-        })
+        }).then(() =>
+            setAviso(1)
+        )
+
     }
+
+ */
 
     const deletePersonaDependiente = async () => {
         const token = await AsyncStorage.getItem("accessToken")
@@ -76,6 +85,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
     return (
         <FlatList ListHeaderComponent={
             <>
+
                 <Layout>
                     <View style={styles.container}>
                         <Text style={styles.itemTitle}>Nombre: {personaDependiente.nombre}</Text>

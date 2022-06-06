@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Layout from "./Layout";
-import DatePicker from 'react-native-datepicker';
+import DatePicker from 'react-native-date-picker';
 
 
 const ShowRegistro = ({navigation, route}) => {
@@ -22,22 +22,7 @@ const ShowRegistro = ({navigation, route}) => {
     const fechaString = fechaSeleccionada.toLocaleDateString();
     const mes = fechaSeleccionada.getMonth()+1;
 
-    let [isVisible, setIsVisible] = useState(false)
-
-
-    const handlePicker = () => {
-        setIsVisible(false)
-    }
-
-    const showPicker = () => {
-        setIsVisible(true)
-    }
-
-
-    const hidePicker = () => {
-        setIsVisible(false)
-    }
-
+    const [open, setOpen] = useState(false)
 
 
     useEffect(async () => {
@@ -95,21 +80,19 @@ const ShowRegistro = ({navigation, route}) => {
             <>
                 <Layout>
 
-                    <View style={styles.container}>
-                        <Text>Seleccionar fecha :</Text>
-                        <DatePicker
-                            date={fechaSeleccionada}
-                            mode="date"
-                            placeholder="select date"
-                            format="DD/MM/YYYY"
-                            confirmBtnText="Aceptar"
-                            cancelBtnText="Cancelar"
-                            onDateChange={(date) => {
-                                setFechaSeleccionada(date);
-                            }}
-                        />
-                    </View>
-
+                    <Button title="Open" onPress={() => setOpen(true)} />
+                    <DatePicker
+                        modal
+                        open={open}
+                        date={fechaSeleccionada}
+                        onConfirm={(date) => {
+                            setOpen(false)
+                            setFechaSeleccionada(date)
+                        }}
+                        onCancel={() => {
+                            setOpen(false)
+                        }}
+                    />
 
 
                     {registro && Object.entries(registro).length !== 0 &&
