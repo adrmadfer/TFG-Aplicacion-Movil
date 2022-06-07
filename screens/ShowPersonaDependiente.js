@@ -152,8 +152,16 @@ const ShowPersonaDependiente = ({navigation, route}) => {
         }
                   ListFooterComponent={
             <>
+
+                {authState.rol !== "AUXILIAR" &&
+
                 <AuxiliaresAsignados id={route.params.id}/>
+                }
+
+                {authState.rol !== "FAMILIAR" &&
                 <FamiliaresAsignados id={route.params.id}/>
+                }
+
 
             </>
 

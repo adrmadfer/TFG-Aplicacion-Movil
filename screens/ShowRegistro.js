@@ -4,10 +4,8 @@ import {AuthContext} from "../helpers/AuthContext";
 import {baseURL} from "../helpers/IPConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Layout from "./Layout";
-import DatePicker from 'react-native-date-picker';
-
 
 const ShowRegistro = ({navigation, route}) => {
 
@@ -20,6 +18,9 @@ const ShowRegistro = ({navigation, route}) => {
     const { authState } = useContext(AuthContext);
 
     const fechaString = fechaSeleccionada.toLocaleDateString();
+
+    const [fecha,setFecha] = useState(fechaString);
+
     const mes = fechaSeleccionada.getMonth()+1;
 
     const [open, setOpen] = useState(false)
@@ -54,7 +55,7 @@ const ShowRegistro = ({navigation, route}) => {
 
 
     const showRegistro = async () => {
-        await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fechaString}`,
+        await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fecha}`,
             {headers: {accessToken: localStorage.getItem("accessToken"),}})
             .then((response) => {
                 setRegistro(response.data);
@@ -70,15 +71,8 @@ const ShowRegistro = ({navigation, route}) => {
                        <Text style={styles.itemTitle}>Buscar</Text>
                    </TouchableOpacity>
 
-                   */
 
 
-
-
-    return (
-        <FlatList ListHeaderComponent={
-            <>
-                <Layout>
 
                     <Button title="Open" onPress={() => setOpen(true)} />
                     <DatePicker
@@ -93,6 +87,30 @@ const ShowRegistro = ({navigation, route}) => {
                             setOpen(false)
                         }}
                     />
+
+                   */
+
+
+
+
+
+
+    return (
+        <FlatList ListHeaderComponent={
+            <>
+                <Layout>
+
+                    <TouchableOpacity style={styles.buttonSave} onPress={showRegistro()}>
+                        <Text style={styles.buttonText}>Indique la fecha deseada para ver un registro:</Text>
+                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => setFecha(text)}
+                        value={fecha}
+                        placeholder="(23/5/2022)"
+                    >
+                    </TextInput>
+
 
 
                     {registro && Object.entries(registro).length !== 0 &&

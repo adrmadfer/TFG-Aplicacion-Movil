@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -24,6 +24,7 @@ import CreateAviso from "../screens/CreateAviso";
 import Observaciones from "../screens/Observaciones";
 import Avisos from "../screens/Avisos";
 import ShowRegistro from "../screens/ShowRegistro";
+import {AuthContext} from "../helpers/AuthContext";
 
 
 const Tab = createBottomTabNavigator();
@@ -193,6 +194,9 @@ const GestionarFamiliaresStack = () => {
 }
 
 const TabNavigator = () => {
+
+    const { authState } = useContext(AuthContext);
+
     return(
         <Tab.Navigator screenOptions={{
             headerShown: false,
@@ -209,16 +213,21 @@ const TabNavigator = () => {
                     <Ionicons name="people" color={color} size={size} />
                 )
             }}/>
-            <Tab.Screen name="Auxiliares" component={GestionarAuxiliaresStack} options={{
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="people" color={color} size={size} />
-                )
-            }}/>
-            <Tab.Screen name="Familiares" component={GestionarFamiliaresStack} options={{
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="people" color={color} size={size} />
-                )
-            }}/>
+            {authState.rol === "COORDINADOR" &&
+                <>
+                    <Tab.Screen name="Auxiliares" component={GestionarAuxiliaresStack} options={{
+                        tabBarIcon: ({color, size}) => (
+                            <Ionicons name="people" color={color} size={size} />
+                        )
+                    }}/>
+                    <Tab.Screen name="Familiares" component={GestionarFamiliaresStack} options={{
+                        tabBarIcon: ({color, size}) => (
+                            <Ionicons name="people" color={color} size={size} />
+                        )
+                    }}/>
+                </>
+            }
+
         </Tab.Navigator>
         );
 }

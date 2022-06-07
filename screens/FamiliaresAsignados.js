@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {View, Text, TouchableOpacity, StyleSheet, FlatList} from 'react-native'
 import Layout from "./Layout";
 import {useIsFocused, useNavigation} from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {baseURL} from "../helpers/IPConfig";
+import {AuthContext} from "../helpers/AuthContext";
 
 const FamiliaresAsignados = ({id}) => {
 
+    const { authState } = useContext(AuthContext);
     const navigation = useNavigation()
     const [listOfFamiliaresAsignados, setListOfFamiliaresAsignados] = useState([])
     const isFocused = useIsFocused();
@@ -43,18 +45,26 @@ const FamiliaresAsignados = ({id}) => {
             <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate("ShowFamiliar", {id: item.id})}>
                 <Text style={styles.itemTitle}>{item.nombre + " " + item.apellidos}</Text>
             </TouchableOpacity>
+
+            {authState.rol === "COORDINADOR" &&
             <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUserPersonaDependiente(item.id, id)}>
                 <Text style={styles.itemTitle}>Eliminar</Text>
             </TouchableOpacity>
+            }
+
         </View>
     }
 
     return (
         <Layout>
             <Text>Familiares asignados</Text>
+
+            {authState.rol==="COORDINADOR" &&
             <TouchableOpacity style={styles.asignarFamiliarButton} onPress={() => navigation.navigate("CreateFamiliar", {id: id})}>
                 <Text style={styles.itemTitle}>Asignar familiar</Text>
             </TouchableOpacity>
+            }
+
             <FlatList
                 listKey="familiares-asignados"
                 style={{
