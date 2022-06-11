@@ -11,7 +11,6 @@ const CustomDrawer = (props) => {
 
     const logout = async () => {
         try {
-            console.log("Logout")
             removeItem("accessToken")
             setAuthState({
                 username: "",

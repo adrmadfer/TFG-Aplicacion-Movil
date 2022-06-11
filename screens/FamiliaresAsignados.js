@@ -38,6 +38,14 @@ const FamiliaresAsignados = ({id}) => {
                     })
                 )
             }).catch((e) => console.log(e))
+
+        await axios.delete(`http://${baseURL}:3001/users/familiares/delete/${familiarId}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                if(response.data.error) {
+                    console.log(response.data.error)
+                }
+            }).catch((e) => console.log(e))
     }
 
     const renderItem = ({item}) => {

@@ -38,7 +38,7 @@ const ShowRegistro = ({navigation, route}) => {
 
 
         await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistrosMes/${id}?mes=${mes}`,
-            {headers: {accessToken: localStorage.getItem("accessToken"),}})
+            {headers: {accessToken: token}})
             .then((response) => {
                 setRegistrosMes(response.data);
                 console.log(response.data)
@@ -46,7 +46,7 @@ const ShowRegistro = ({navigation, route}) => {
 
 
         await axios.get(`http://${baseURL}:3001/personasDependientes/show/${id}`,
-            {headers: {accessToken: localStorage.getItem("accessToken"),}})
+            {headers: {accessToken: token}})
             .then((response) => {
                 setPersonaDependiente(response.data);
             }).catch((e) => console.log(e))
@@ -55,54 +55,24 @@ const ShowRegistro = ({navigation, route}) => {
 
 
     const showRegistro = async () => {
+        const token = await AsyncStorage.getItem("accessToken")
         await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fecha}`,
-            {headers: {accessToken: localStorage.getItem("accessToken"),}})
+            {headers: {accessToken: token}})
             .then((response) => {
                 setRegistro(response.data);
             }).catch((e) => console.log(e))
     }
 
+
     /*
-                   <View>
-                       <NativeDatePickerAndroid value={fechaSeleccionada} onChange{setFechaSeleccionada}/>
-                   </View>
-
-                   <TouchableOpacity style={styles.buscarButton} onPress={showRegistro()}>
-                       <Text style={styles.itemTitle}>Buscar</Text>
-                   </TouchableOpacity>
-
-
-
-
-                    <Button title="Open" onPress={() => setOpen(true)} />
-                    <DatePicker
-                        modal
-                        open={open}
-                        date={fechaSeleccionada}
-                        onConfirm={(date) => {
-                            setOpen(false)
-                            setFechaSeleccionada(date)
-                        }}
-                        onCancel={() => {
-                            setOpen(false)
-                        }}
-                    />
-
-                   */
-
-
-
-
-
-
-    return (
-        <FlatList ListHeaderComponent={
-            <>
-                <Layout>
-
-                    <TouchableOpacity style={styles.buttonSave} onPress={showRegistro()}>
+    <TouchableOpacity style={styles.buttonSave} onPress={showRegistro}>
                         <Text style={styles.buttonText}>Indique la fecha deseada para ver un registro:</Text>
                     </TouchableOpacity>
+     */
+
+    return (
+                <Layout>
+                    <Text>Indique la fecha deseada para ver un registro:</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => setFecha(text)}
@@ -111,37 +81,37 @@ const ShowRegistro = ({navigation, route}) => {
                     >
                     </TextInput>
 
+                    <TouchableOpacity style={styles.buscarButton} onPress={showRegistro}>
+                        <Text>Buscar</Text>
+                    </TouchableOpacity>
 
 
-                    {registro && Object.entries(registro).length !== 0 &&
 
-                    <View style={styles.container}>
-                        <Text style={styles.itemTitle}>Desayuno: {registro.desayuno}</Text>
-                        <Text style={styles.itemTitle}>Almuerzo: {registro.almuerzo}</Text>
-                        <Text style={styles.itemTitle}>Merienda: {registro.merienda}</Text>
-                        <Text style={styles.itemTitle}>Cena: {registro.cena}</Text>
-                        <Text style={styles.itemTitle}>Pasos diarios: {registro.pasosDiarios}</Text>
-                        <Text style={styles.itemTitle}>Actividad física: {registro.actividadFisica}</Text>
-                        <Text style={styles.itemTitle}>Horas de sueño: {registro.horasSueno}</Text>
-                    </View>
+                    {registro && Object.entries(registro).length !== 0 ? (
+                            <View style={styles.container}>
+                                <Text style={styles.itemTitle}>Desayuno: {registro.desayuno}</Text>
+                                <Text style={styles.itemTitle}>Almuerzo: {registro.almuerzo}</Text>
+                                <Text style={styles.itemTitle}>Merienda: {registro.merienda}</Text>
+                                <Text style={styles.itemTitle}>Cena: {registro.cena}</Text>
+                                <Text style={styles.itemTitle}>Pasos diarios: {registro.pasosDiarios}</Text>
+                                <Text style={styles.itemTitle}>Actividad física: {registro.actividadFisica}</Text>
+                                <Text style={styles.itemTitle}>Horas de sueño: {registro.horasSueno}</Text>
+                            </View>
+                        ) : null
+
+
+
+
 
                     }
 
-                    {Object.entries(registro).length === 0 &&
-
-                    <div className="no-registro">
-                        NO HAY NINGÚN REGISTRO
-                    </div>
+                    {Object.entries(registro).length === 0 ? (
+                                <Text>No hay registros</Text>
+                        ) : null
 
                     }
-
 
                 </Layout>
-            </>
-        }
-
-        />
-
     )
 
 
@@ -193,7 +163,21 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#FF0000',
-    }
+    },
+    input: {
+        width: "90%",
+        marginTop: '3%',
+        marginBottom: '7%',
+        fontSize: 14,
+        borderWidth: 1,
+        borderColor: "#10ac84",
+        height: 30,
+        color: "black",
+        textAlign: "center",
+        padding: 4,
+        borderRadius: 5,
+    },
+
 })
 
 export default ShowRegistro;

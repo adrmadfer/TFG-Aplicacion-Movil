@@ -32,7 +32,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
             });
 
         await  axios.get(`http://${baseURL}:3001/avisos/notificacion/${id}`,
-            {headers: {accessToken: localStorage.getItem("accessToken"),}})
+            {headers: {accessToken: token}})
             .then((response) => {
                 setNotificacionAviso(response.data);
 
@@ -85,7 +85,6 @@ const ShowPersonaDependiente = ({navigation, route}) => {
     return (
         <FlatList ListHeaderComponent={
             <>
-
                 <Layout>
                     <View style={styles.container}>
                         <Text style={styles.itemTitle}>Nombre: {personaDependiente.nombre}</Text>
