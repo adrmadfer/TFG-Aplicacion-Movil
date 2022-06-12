@@ -15,17 +15,24 @@ const ShowPersonaDependiente = ({navigation, route}) => {
     const { authState } = useContext(AuthContext);
     const [personaDependiente, setPersonaDependiente] = useState({});
     const fechaActual = new Date(Date.now());
+    const horaActual = fechaActual.getHours();
     const fechaString = fechaActual.toLocaleDateString();
     const [registro, setRegistro] = useState({});
     const [notificacion, setNotificacion] = useState({});
     const [notificacionAviso, setNotificacionAviso] = useState({});
+    const [notificacionMedicacion, setNotificacionMedicacion] = useState({});
     const id = route.params.id
     const isFocused = useIsFocused();
 
     const [aviso, setAviso] = useState(0)
+    const [aviso1, setAviso1] = useState(0)
+    const [token, setToken] = useState();
+
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
+
+        await setToken(token)
 
         await axios.get(`http://${baseURL}:3001/observaciones/notificacion/${id}`,
             {headers: {accessToken: token}})
@@ -53,6 +60,18 @@ const ShowPersonaDependiente = ({navigation, route}) => {
             .then((response) => {
                 setPersonaDependiente(response.data);
             }).catch((e) => console.log(e))
+
+        await axios.get(`http://${baseURL}:3001/notificaciones/createNotificacionMedicacion/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                console.log(response.data);
+            });
+
+        await axios.get(`http://${baseURL}:3001/notificaciones/notificacionMedicacion/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                setNotificacionMedicacion(response.data);
+            });
     }, [isFocused])
 
 /*
@@ -78,6 +97,86 @@ const ShowPersonaDependiente = ({navigation, route}) => {
     }
 
  */
+
+    // MOSTRAR AL AUXILIAR LA MEDICACION QUE TIENE QUE TOMAR EN FORMA DE NOTIFICACION
+    if(authState.rol === "AUXILIAR") {
+        const med = personaDependiente.pastillasDia;
+        if(Object.values(notificacionMedicacion).at(2) === false && horaActual >= 6 && horaActual < 13 && aviso1.valueOf() === 0) {
+
+            //console.log(personaDependiente.pastillasDia);
+            Swal.fire({
+                icon: "info",
+                title: "AVISO",
+                text: `Tiene que tomar la siguiente medicacion: ${med}`,
+                showCancelButton: true,
+                confirmButtonText: "Listo",
+                cancelButtonText: "Cancelar",
+            }) .then(resultado => {
+                if (resultado.value) {
+
+                    axios.get(`http://${baseURL}:3001/notificaciones/updateDia/${id}`,
+                        {headers: {accessToken: token}})
+                        .then((response) => {
+                            console.log(response.data);
+                        });
+                    setAviso1(1)
+                } else {
+                    setAviso1(1)
+                }
+            });
+
+        } else if(Object.values(notificacionMedicacion).at(3) === false && horaActual >= 13 && horaActual < 21 && aviso1.valueOf() === 0){
+
+            console.log(token)
+
+            Swal.fire({
+                icon: "info",
+                title: "AVISO",
+                text: `Tiene que tomar la siguiente medicacion: ${personaDependiente.pastillasTarde}`,
+                showCancelButton: true,
+                confirmButtonText: "Listo",
+                cancelButtonText: "Cancelar",
+            }) .then(resultado => {
+                if (resultado.value) {
+
+                    axios.get(`http://${baseURL}:3001/notificaciones/updateTarde/${id}`,
+                        {headers: {accessToken: token}})
+                        .then((response) => {
+                            console.log(response.data);
+                        });
+
+                    setAviso1(1)
+                } else {
+                    setAviso1(1)
+                }
+            });
+
+        } else if(Object.values(notificacionMedicacion).at(4) === false && (horaActual >= 21 || horaActual < 5) && aviso1.valueOf() === 0) {
+
+            Swal.fire({
+                icon: "info",
+                title: "AVISO",
+                text: `Tiene que tomar la siguiente medicacion: ${personaDependiente.pastillasNoche}`,
+                showCancelButton: true,
+                confirmButtonText: "Listo",
+                cancelButtonText: "Cancelar",
+
+            })  .then(resultado => {
+                if (resultado.value) {
+
+                    axios.get(`http://${baseURL}:3001/notificaciones/updateNoche/${id}`,
+                        {headers: {accessToken: token}})
+                        .then((response) => {
+                            console.log(response.data);
+                        });
+                    setAviso1(1)
+                } else {
+                    setAviso1(1)
+                }
+            });
+
+        }
+    }
 
     const deletePersonaDependiente = async () => {
         const token = await AsyncStorage.getItem("accessToken")
