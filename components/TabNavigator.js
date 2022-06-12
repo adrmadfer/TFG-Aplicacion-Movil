@@ -19,6 +19,7 @@ import CreateFamiliar from "../screens/CreateFamiliar";
 import ShowFamiliar from "../screens/ShowFamiliar";
 import EditFamiliar from "../screens/EditFamiliar";
 import CreateRegistro from "../screens/CreateRegistro";
+import EditRegistro from "../screens/EditRegistro";
 import CreateObservacion from "../screens/CreateObservacion";
 import CreateAviso from "../screens/CreateAviso";
 import Observaciones from "../screens/Observaciones";
@@ -86,6 +87,13 @@ const GestionarPersonasDependientesStack = () => {
             }}
                           name="CreateRegistro"
                           component={CreateRegistro}
+            />
+
+            <Stack.Screen options={{
+                title: "Modificar Registro Diario",
+            }}
+                          name="EditRegistro"
+                          component={EditRegistro}
             />
 
             <Stack.Screen options={{

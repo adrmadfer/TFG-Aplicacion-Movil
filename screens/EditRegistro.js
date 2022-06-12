@@ -1,4 +1,4 @@
-import {useNavigation} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
 import {AuthContext} from "../helpers/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -9,21 +9,50 @@ import Layout from "./Layout";
 import {useContext} from "react";
 import * as Yup from "yup";
 
-const CreateRegistro = ({navigation, route}) => {
+const EditRegistro = ({navigation, route}) => {
 
     const id = route.params.id
     const { authState } = useContext(AuthContext);
+    const [registro, setRegistro] = useState({});
+    const [registroAUX, setRegistroAUX] = useState({});
+    const hoy = new Date(Date.now());
+    const fechaString = hoy.toLocaleDateString();
+    const auxiliarId = authState.id;
+    const isFocused = useIsFocused();
+
+    useEffect(async () => {
+        const token = await AsyncStorage.getItem("accessToken")
+
+        await  axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fechaString}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                setRegistro(response.data);
+            });
+
+        await axios.get(`http://${baseURL}/registrosDiarios/auxiliarRegistro/${id}?fecha=${fechaString}`,
+            {headers: {accessToken: token},
+            })
+            .then((response) => {
+                if(response.data.error) {
+                    console.log(response.data.error);
+                } else {
+                    setRegistroAUX(response.data);
+                    console.log(response);
+                }
+            });
+
+    }, [isFocused])
 
     const initialValues = {
-        desayuno: "",
-        almuerzo: "",
-        merienda: "",
-        cena: "",
-        pasosDiarios: 0,
-        actividadFisica: "",
-        horasSueno: 0.0,
-        tiempoAireLibre:"",
-        relacionSocial: "",
+        desayuno: registro.desayuno,
+        almuerzo: registro.almuerzo,
+        merienda: registro.merienda,
+        cena: registro.merienda,
+        pasosDiarios: registro.pasosDiarios,
+        actividadFisica: registro.actividadFisica,
+        horasSueno: registro.horasSueno,
+        tiempoAireLibre:registro.tiempoAireLibre,
+        relacionSocial: registro.relacionSocial,
         PersonasDependienteId: id
     };
 
@@ -39,7 +68,9 @@ const CreateRegistro = ({navigation, route}) => {
         auxiliarId : authState.id,
     }
 
-    const crearRegistro = async (values) => {
+    const registroId = registro.id;
+
+    const editRegistro = async (values) => {
 
         const data = {
             desayuno: values.desayuno,
@@ -54,17 +85,7 @@ const CreateRegistro = ({navigation, route}) => {
             PersonasDependienteId: values.PersonasDependienteId,
         }
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.post(`http://${baseURL}:3001/registrosDiarios/addRegistro`, data,
-            {headers: {accessToken: token}})
-            .then((response) => {
-                if(response.data.error) {
-                    console.log(response.data.error)
-                }
-            }).catch(e => {
-                console.log(e)
-            })
-
-        await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, data2,
+        await axios.put(`http://${baseURL}:3001/registrosDiarios/registro/edit/${registroId}`, data,
             {headers: {accessToken: token}})
             .then((response) => {
                 if(response.data.error) {
@@ -76,6 +97,22 @@ const CreateRegistro = ({navigation, route}) => {
                 console.log(e)
             })
 
+        if(registroAUX.length === 0) {
+            const auxiliarId = authState.id;
+
+            await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, data2,
+                {headers: {accessToken: token}})
+                .then((response) => {
+                    if(response.data.error) {
+                        console.log(response.data.error)
+                    } else {
+                        navigation.goBack()
+                    }
+                }).catch(e => {
+                    console.log(e)
+                })
+        }
+
     }
 
 
@@ -84,7 +121,7 @@ const CreateRegistro = ({navigation, route}) => {
         <ScrollView>
             <Formik
                 initialValues={initialValues}
-                onSubmit={crearRegistro}
+                onSubmit={editRegistro}
                 validationSchema={validationSchema}
             >
                 {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
@@ -209,4 +246,4 @@ const styles = StyleSheet.create({
 
 
 
-export default CreateRegistro;
+export default EditRegistro;

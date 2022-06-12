@@ -14,6 +14,9 @@ const ShowPersonaDependiente = ({navigation, route}) => {
 
     const { authState } = useContext(AuthContext);
     const [personaDependiente, setPersonaDependiente] = useState({});
+    const fechaActual = new Date(Date.now());
+    const fechaString = fechaActual.toLocaleDateString();
+    const [registro, setRegistro] = useState({});
     const [notificacion, setNotificacion] = useState({});
     const [notificacionAviso, setNotificacionAviso] = useState({});
     const id = route.params.id
@@ -35,6 +38,13 @@ const ShowPersonaDependiente = ({navigation, route}) => {
             {headers: {accessToken: token}})
             .then((response) => {
                 setNotificacionAviso(response.data);
+
+            });
+
+       await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fechaString}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                setRegistro(response.data);
 
             });
 
@@ -113,9 +123,16 @@ const ShowPersonaDependiente = ({navigation, route}) => {
 
 
 
-                    {authState.rol === "AUXILIAR" && (
+                    {authState.rol === "AUXILIAR" && Object.entries(registro).length === 0 && (
                         <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("CreateRegistro", {id: route.params.id})}>
                             <Text style={styles.itemTitle}>Iniciar Registro Diario</Text>
+                        </TouchableOpacity>
+
+                    )}
+
+                    {authState.rol === "AUXILIAR"  && Object.entries(registro).length !== 0 && (
+                        <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("EditRegistro", {id: route.params.id})}>
+                            <Text style={styles.itemTitle}>Modificar Registro Diario</Text>
                         </TouchableOpacity>
 
                     )}
