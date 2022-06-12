@@ -6,7 +6,7 @@ import {baseURL} from "../helpers/IPConfig";
 import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Formik} from "formik";
 import Layout from "./Layout";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import * as Yup from "yup";
 
 const EditRegistro = ({navigation, route}) => {
@@ -18,7 +18,6 @@ const EditRegistro = ({navigation, route}) => {
     const hoy = new Date(Date.now());
     const fechaString = hoy.toLocaleDateString();
     const auxiliarId = authState.id;
-    const isFocused = useIsFocused();
 
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
@@ -27,7 +26,8 @@ const EditRegistro = ({navigation, route}) => {
             {headers: {accessToken: token}})
             .then((response) => {
                 setRegistro(response.data);
-            });
+            }).catch((e) => console.log(e));
+
 
         await axios.get(`http://${baseURL}/registrosDiarios/auxiliarRegistro/${id}?fecha=${fechaString}`,
             {headers: {accessToken: token},
@@ -41,7 +41,7 @@ const EditRegistro = ({navigation, route}) => {
                 }
             });
 
-    }, [isFocused])
+    }, [])
 
     const initialValues = {
         desayuno: registro.desayuno,
@@ -100,7 +100,7 @@ const EditRegistro = ({navigation, route}) => {
         if(registroAUX.length === 0) {
             const auxiliarId = authState.id;
 
-            await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, data2,
+            await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, auxiliarId,
                 {headers: {accessToken: token}})
                 .then((response) => {
                     if(response.data.error) {
@@ -120,6 +120,7 @@ const EditRegistro = ({navigation, route}) => {
     return (
         <ScrollView>
             <Formik
+                enableReinitialize={true}
                 initialValues={initialValues}
                 onSubmit={editRegistro}
                 validationSchema={validationSchema}

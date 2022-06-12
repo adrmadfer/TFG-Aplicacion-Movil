@@ -64,11 +64,10 @@ const ShowRegistro = ({navigation, route}) => {
     }
 
 
-    /*
-    <TouchableOpacity style={styles.buttonSave} onPress={showRegistro}>
-                        <Text style={styles.buttonText}>Indique la fecha deseada para ver un registro:</Text>
-                    </TouchableOpacity>
-     */
+
+    const medicacionManana = (registro.medicacionManana === false) ? "No" : "Si";
+    const medicacionTarde = (registro.medicacionTarde === false) ? "No" : "Si";
+    const medicacionNoche = (registro.medicacionNoche === false) ? "No" : "Si";
 
     return (
                 <Layout>
@@ -93,9 +92,14 @@ const ShowRegistro = ({navigation, route}) => {
                                 <Text style={styles.itemTitle}>Almuerzo: {registro.almuerzo}</Text>
                                 <Text style={styles.itemTitle}>Merienda: {registro.merienda}</Text>
                                 <Text style={styles.itemTitle}>Cena: {registro.cena}</Text>
+                                <Text style={styles.itemTitle}>¿Ha tomado la medicacicón correspondiente a la mañana?: {medicacionManana}</Text>
+                                <Text style={styles.itemTitle}>¿Ha tomado la medicacicón correspondiente a la tarde?: {medicacionTarde}</Text>
+                                <Text style={styles.itemTitle}>¿Ha tomado la medicacicón correspondiente a la noche?: {medicacionNoche}</Text>
                                 <Text style={styles.itemTitle}>Pasos diarios: {registro.pasosDiarios}</Text>
                                 <Text style={styles.itemTitle}>Actividad física: {registro.actividadFisica}</Text>
                                 <Text style={styles.itemTitle}>Horas de sueño: {registro.horasSueno}</Text>
+                                <Text style={styles.itemTitle}>Tiempo aire libre: {registro.tiempoAireLibre}</Text>
+                                <Text style={styles.itemTitle}>Relaciones sociales: {registro.relacionSocial}</Text>
                             </View>
                         ) : null
 
