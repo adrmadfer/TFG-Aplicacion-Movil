@@ -8,22 +8,66 @@ import AuxiliaresAsignados from "./AuxiliaresAsignados";
 import FamiliaresAsignados from "./FamiliaresAsignados";
 import {baseURL} from "../helpers/IPConfig";
 import {AuthContext} from "../helpers/AuthContext";
+import Swal from "sweetalert2";
 
 const ShowPersonaDependiente = ({navigation, route}) => {
 
     const { authState } = useContext(AuthContext);
     const [personaDependiente, setPersonaDependiente] = useState({});
+    const [notificacion, setNotificacion] = useState({});
+    const [notificacionAviso, setNotificacionAviso] = useState({});
     const id = route.params.id
     const isFocused = useIsFocused();
 
+    const [aviso, setAviso] = useState(0)
+
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
+
+        await axios.get(`http://${baseURL}:3001/observaciones/notificacion/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                setNotificacion(response.data);
+
+            });
+
+        await  axios.get(`http://${baseURL}:3001/avisos/notificacion/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                setNotificacionAviso(response.data);
+
+            });
+
         await axios.get(`http://${baseURL}:3001/personasDependientes/show/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 setPersonaDependiente(response.data);
             }).catch((e) => console.log(e))
     }, [isFocused])
+
+/*
+    //Mostrar notificación de una nueva observación al familiar
+    if (Object.values(notificacion).at(1) && authState.rol === "FAMILIAR" && aviso.valueOf() === 0) {
+        Swal.fire({
+            icon: "info", title: "INFORMACIÓN",
+            text: "Hay nuevas observaciones"
+        }).then(() =>
+            setAviso(1)
+        )
+    }
+
+    //Mostrar notificación de un nuevo aviso al auxiliar
+    if (Object.values(notificacionAviso).at(1) && authState.rol === "AUXILIAR" && aviso.valueOf() === 0) {
+        Swal.fire({
+            icon: "info", title: "INFORMACIÓN",
+            text: "Hay un nuevo aviso"
+        }).then(() =>
+            setAviso(1)
+        )
+
+    }
+
+ */
 
     const deletePersonaDependiente = async () => {
         const token = await AsyncStorage.getItem("accessToken")
@@ -107,8 +151,16 @@ const ShowPersonaDependiente = ({navigation, route}) => {
         }
                   ListFooterComponent={
             <>
+
+                {authState.rol !== "AUXILIAR" &&
+
                 <AuxiliaresAsignados id={route.params.id}/>
+                }
+
+                {authState.rol !== "FAMILIAR" &&
                 <FamiliaresAsignados id={route.params.id}/>
+                }
+
 
             </>
 

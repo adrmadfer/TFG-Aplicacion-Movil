@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native'
 import {useIsFocused, useNavigation} from "@react-navigation/native";
 import axios from "axios";
@@ -9,9 +9,11 @@ import Auxiliar from "../components/Auxiliar";
 import {Touchable} from "react-native-web";
 import AuxiliarAsignado from "../components/AuxiliarAsignado";
 import {baseURL} from "../helpers/IPConfig";
+import {AuthContext} from "../helpers/AuthContext";
 
 const AuxiliaresAsignados = ({id}) => {
 
+    const { authState } = useContext(AuthContext);
     const navigation = useNavigation()
     const [listOfAuxiliaresAsignados, setListOfAuxiliaresAsignados] = useState([]);
     const isFocused = useIsFocused();
@@ -47,18 +49,26 @@ const AuxiliaresAsignados = ({id}) => {
             <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate("ShowAuxiliar", {id: item.id})}>
                 <Text style={styles.itemTitle}>{item.nombre + " " + item.apellidos}</Text>
             </TouchableOpacity>
+            {authState.rol === "COORDINADOR" &&
+
             <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUserPersonaDependiente(item.id, id)}>
                 <Text style={styles.itemTitle}>Eliminar</Text>
             </TouchableOpacity>
+            }
+
         </View>
     }
 
     return (
         <Layout>
             <Text>Auxiliares asignados</Text>
+
+            {authState.rol === "COORDINADOR" &&
             <TouchableOpacity style={styles.asignarAuxiliarButton} onPress={() => navigation.navigate("AuxiliaresDisponibles", {id: id})}>
                 <Text style={styles.itemTitle}>Asignar auxiliar</Text>
             </TouchableOpacity>
+            }
+
             <FlatList
                 listKey="auxiliares-asignados"
                 style={{

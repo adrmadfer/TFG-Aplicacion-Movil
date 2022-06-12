@@ -79,12 +79,7 @@ const App = () => {
                     ) : (
                         <>
                             <Drawer.Screen name="Home" component={TabNavigator} options={{
-                                title: 'App',
-                                drawerIcon: ({color}) => (
-                                    <Ionicons name="home-outline" size={22} color={color}/>
-                                )
-                            }}/>
-                            <Drawer.Screen name="GestionarPersonasDependientes" component={GestionarPersonasDependientes} options={{
+                                title: 'CareUs!',
                                 drawerIcon: ({color}) => (
                                     <Ionicons name="home-outline" size={22} color={color}/>
                                 )
