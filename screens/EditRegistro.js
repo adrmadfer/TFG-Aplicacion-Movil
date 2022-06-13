@@ -22,17 +22,15 @@ const EditRegistro = ({navigation, route}) => {
     useEffect(async () => {
         const token = await AsyncStorage.getItem("accessToken")
 
-        await  axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fechaString}`,
+        await axios.get(`http://${baseURL}:3001/registrosDiarios/showRegistro/${id}?fecha=${fechaString}`,
             {headers: {accessToken: token}})
             .then((response) => {
-                setRegistro(response.data);
+                 setRegistro(response.data);
             }).catch((e) => console.log(e));
 
-
-        await axios.get(`http://${baseURL}/registrosDiarios/auxiliarRegistro/${id}?fecha=${fechaString}`,
-            {headers: {accessToken: token},
-            })
-            .then((response) => {
+        await axios.get(`http://${baseURL}:3001/registrosDiarios/auxiliarRegistro/${id}?fecha=${fechaString}`,
+            {headers: {accessToken: token}})
+            .then( (response) => {
                 if(response.data.error) {
                     console.log(response.data.error);
                 } else {
@@ -40,6 +38,7 @@ const EditRegistro = ({navigation, route}) => {
                     console.log(response);
                 }
             });
+
 
     }, [])
 
@@ -97,6 +96,7 @@ const EditRegistro = ({navigation, route}) => {
                 console.log(e)
             })
 
+        console.log(registroAUX)
         if(Object.entries(registroAUX).length === 0) {
            // const auxiliarId = authState.id;
 
@@ -209,6 +209,7 @@ const EditRegistro = ({navigation, route}) => {
                         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>Guardar registro</Text>
                         </TouchableOpacity>
+
                     </Layout>
                 )}
             </Formik>
