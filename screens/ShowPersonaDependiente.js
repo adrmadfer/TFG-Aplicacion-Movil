@@ -74,15 +74,16 @@ const ShowPersonaDependiente = ({navigation, route}) => {
             });
     }, [isFocused])
 
-/*
+
+
+
     //Mostrar notificación de una nueva observación al familiar
     if (Object.values(notificacion).at(1) && authState.rol === "FAMILIAR" && aviso.valueOf() === 0) {
         Swal.fire({
             icon: "info", title: "INFORMACIÓN",
             text: "Hay nuevas observaciones"
-        }).then(() =>
-            setAviso(1)
-        )
+        })
+        setAviso(1)
     }
 
     //Mostrar notificación de un nuevo aviso al auxiliar
@@ -90,13 +91,41 @@ const ShowPersonaDependiente = ({navigation, route}) => {
         Swal.fire({
             icon: "info", title: "INFORMACIÓN",
             text: "Hay un nuevo aviso"
-        }).then(() =>
-            setAviso(1)
-        )
-
+        })
+        setAviso(1)
     }
 
- */
+
+
+    const pruebaDia = async () => {
+        await axios.get(`http://${baseURL}:3001/notificaciones/updateDia/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                console.log(response.data);
+            });
+        await setAviso1(1)
+        await navigation.navigate("ShowRegistro", {id: route.params.id})
+    }
+
+    const pruebaNoche = async () => {
+        await axios.get(`http://${baseURL}:3001/notificaciones/updateNoche/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+
+            });
+        await setAviso1(1)
+        await navigation.navigate("ShowRegistro", {id: route.params.id})
+    }
+
+    const pruebaTarde = async () => {
+        await axios.get(`http://${baseURL}:3001/notificaciones/updateTarde/${id}`,
+            {headers: {accessToken: token}})
+            .then((response) => {
+                console.log(response.data);
+            });
+        await setAviso1(1)
+        await navigation.navigate("ShowRegistro", {id: route.params.id})
+    }
 
     // MOSTRAR AL AUXILIAR LA MEDICACION QUE TIENE QUE TOMAR EN FORMA DE NOTIFICACION
     if(authState.rol === "AUXILIAR") {
@@ -113,13 +142,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
                 cancelButtonText: "Cancelar",
             }) .then(resultado => {
                 if (resultado.value) {
-
-                    axios.get(`http://${baseURL}:3001/notificaciones/updateDia/${id}`,
-                        {headers: {accessToken: token}})
-                        .then((response) => {
-                            console.log(response.data);
-                        });
-                    setAviso1(1)
+                    pruebaDia()
                 } else {
                     setAviso1(1)
                 }
@@ -138,14 +161,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
                 cancelButtonText: "Cancelar",
             }) .then(resultado => {
                 if (resultado.value) {
-
-                    axios.get(`http://${baseURL}:3001/notificaciones/updateTarde/${id}`,
-                        {headers: {accessToken: token}})
-                        .then((response) => {
-                            console.log(response.data);
-                        });
-
-                    setAviso1(1)
+                    pruebaTarde()
                 } else {
                     setAviso1(1)
                 }
@@ -163,13 +179,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
 
             })  .then(resultado => {
                 if (resultado.value) {
-
-                    axios.get(`http://${baseURL}:3001/notificaciones/updateNoche/${id}`,
-                        {headers: {accessToken: token}})
-                        .then((response) => {
-                            console.log(response.data);
-                        });
-                    setAviso1(1)
+                    pruebaNoche()
                 } else {
                     setAviso1(1)
                 }

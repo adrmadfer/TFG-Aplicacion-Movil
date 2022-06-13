@@ -90,17 +90,17 @@ const EditRegistro = ({navigation, route}) => {
             .then((response) => {
                 if(response.data.error) {
                     console.log(response.data.error)
-                } else {
-                    navigation.goBack()
-                }
+                } //else {
+                    //navigation.goBack()
+                //}
             }).catch(e => {
                 console.log(e)
             })
 
-        if(registroAUX.length === 0) {
-            const auxiliarId = authState.id;
+        if(Object.entries(registroAUX).length === 0) {
+           // const auxiliarId = authState.id;
 
-            await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, auxiliarId,
+            await axios.post(`http://${baseURL}:3001/registrosDiarios/addAuxiliarRegistro/${id}`, data2,
                 {headers: {accessToken: token}})
                 .then((response) => {
                     if(response.data.error) {
@@ -111,6 +111,8 @@ const EditRegistro = ({navigation, route}) => {
                 }).catch(e => {
                     console.log(e)
                 })
+        } else {
+            navigation.goBack()
         }
 
     }

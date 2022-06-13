@@ -67,6 +67,19 @@ const GestionarPersonasDependientesStack = () => {
                 name="ShowAuxiliar"
                 component={ShowAuxiliar}
             />
+
+            <Stack.Screen options={{
+                title: "Editar datos del auxiliar",
+            }}
+                          name="EditAuxiliar"
+                          component={EditAuxiliar}
+            />
+            <Stack.Screen options={{
+                title: "Auxiliares",
+            }}
+                          name="GestionarAuxiliares"
+                          component={GestionarAuxiliares}
+            />
             <Stack.Screen options={{
                 title: "Auxiliares disponibles",
             }}
@@ -81,7 +94,18 @@ const GestionarPersonasDependientesStack = () => {
                 name="ShowFamiliar"
                 component={ShowFamiliar}
             />
-
+            <Stack.Screen options={{
+                title: "Editar datos del familiar",
+            }}
+                          name="EditFamiliar"
+                          component={EditFamiliar}
+            />
+            <Stack.Screen options={{
+                title: "Familiares",
+            }}
+                          name="GestionarFamiliares"
+                          component={GestionarFamiliares}
+            />
             <Stack.Screen options={{
                 title: "Iniciar Registro diario",
             }}
