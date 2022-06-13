@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import {useIsFocused} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Layout from "./Layout";
 import {baseURL} from "../helpers/IPConfig";
+import {AuthContext} from "../helpers/AuthContext";
 
 const ShowAuxiliar = ({navigation, route}) => {
 
+    const { authState } = useContext(AuthContext);
     const [auxiliar, setAuxiliar] = useState({});
     const id = route.params.id
     const isFocused = useIsFocused();
@@ -42,12 +44,18 @@ const ShowAuxiliar = ({navigation, route}) => {
                 <Text style={styles.itemTitle}>Teléfono: {auxiliar.telefono}</Text>
                 <Text style={styles.itemTitle}>Username: {auxiliar.username}</Text>
             </View>
-            <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("EditAuxiliar", {id: route.params.id})}>
-                <Text style={styles.itemTitle}>Editar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={deleteAuxiliar}>
-                <Text style={styles.itemTitle}>Eliminar</Text>
-            </TouchableOpacity>
+
+            {authState.rol === "COORDINADOR" &&
+                <>
+                    <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("EditAuxiliar", {id: route.params.id})}>
+                        <Text style={styles.itemTitle}>Editar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deleteButton} onPress={deleteAuxiliar}>
+                        <Text style={styles.itemTitle}>Eliminar</Text>
+                    </TouchableOpacity>
+                </>
+            }
+
         </Layout>
     )
 }

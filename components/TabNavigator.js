@@ -19,6 +19,7 @@ import CreateFamiliar from "../screens/CreateFamiliar";
 import ShowFamiliar from "../screens/ShowFamiliar";
 import EditFamiliar from "../screens/EditFamiliar";
 import CreateRegistro from "../screens/CreateRegistro";
+import EditRegistro from "../screens/EditRegistro";
 import CreateObservacion from "../screens/CreateObservacion";
 import CreateAviso from "../screens/CreateAviso";
 import Observaciones from "../screens/Observaciones";
@@ -66,6 +67,19 @@ const GestionarPersonasDependientesStack = () => {
                 name="ShowAuxiliar"
                 component={ShowAuxiliar}
             />
+
+            <Stack.Screen options={{
+                title: "Editar datos del auxiliar",
+            }}
+                          name="EditAuxiliar"
+                          component={EditAuxiliar}
+            />
+            <Stack.Screen options={{
+                title: "Auxiliares",
+            }}
+                          name="GestionarAuxiliares"
+                          component={GestionarAuxiliares}
+            />
             <Stack.Screen options={{
                 title: "Auxiliares disponibles",
             }}
@@ -80,12 +94,30 @@ const GestionarPersonasDependientesStack = () => {
                 name="ShowFamiliar"
                 component={ShowFamiliar}
             />
-
+            <Stack.Screen options={{
+                title: "Editar datos del familiar",
+            }}
+                          name="EditFamiliar"
+                          component={EditFamiliar}
+            />
+            <Stack.Screen options={{
+                title: "Familiares",
+            }}
+                          name="GestionarFamiliares"
+                          component={GestionarFamiliares}
+            />
             <Stack.Screen options={{
                 title: "Iniciar Registro diario",
             }}
                           name="CreateRegistro"
                           component={CreateRegistro}
+            />
+
+            <Stack.Screen options={{
+                title: "Modificar Registro Diario",
+            }}
+                          name="EditRegistro"
+                          component={EditRegistro}
             />
 
             <Stack.Screen options={{

@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import {useIsFocused, useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Layout from "./Layout";
 import {baseURL} from "../helpers/IPConfig";
+import {AuthContext} from "../helpers/AuthContext";
 
 const ShowFamiliar = ({route}) => {
 
+    const { authState } = useContext(AuthContext);
     const [familiar, setFamiliar] = useState({});
     const id = route.params.id
     const isFocused = useIsFocused();
@@ -43,12 +45,17 @@ const ShowFamiliar = ({route}) => {
                 <Text style={styles.itemTitle}>Teléfono: {familiar.telefono}</Text>
                 <Text style={styles.itemTitle}>Username: {familiar.username}</Text>
             </View>
-            <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("EditFamiliar", {id: route.params.id})}>
-                <Text style={styles.itemTitle}>Editar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={deleteFamiliar}>
-                <Text style={styles.itemTitle}>Eliminar</Text>
-            </TouchableOpacity>
+            {authState.rol === "COORDINADOR" &&
+                <>
+                    <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("EditFamiliar", {id: route.params.id})}>
+                        <Text style={styles.itemTitle}>Editar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deleteButton} onPress={deleteFamiliar}>
+                        <Text style={styles.itemTitle}>Eliminar</Text>
+                    </TouchableOpacity>
+                </>
+            }
+
         </Layout>
     )
 }
