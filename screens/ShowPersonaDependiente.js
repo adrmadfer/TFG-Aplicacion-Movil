@@ -190,7 +190,7 @@ const ShowPersonaDependiente = ({navigation, route}) => {
 
     const deletePersonaDependiente = async () => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete(`http://${baseURL}/personasDependientes/delete/${id}`,
+        await axios.delete(`http://${baseURL}:3001/personasDependientes/delete/${id}`,
             {headers: {accessToken: token}})
             .then((response) => {
                 if (response.data.error) {
