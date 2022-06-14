@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import {useNavigation} from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {baseURL} from "../helpers/IPConfig";
 
 const AuxiliarDisponible = ({item, id}) => {
     const navigation = useNavigation();
@@ -11,7 +12,7 @@ const AuxiliarDisponible = ({item, id}) => {
         const token = await AsyncStorage.getItem("accessToken")
         console.log(userId)
         console.log(personaDependienteId)
-        await axios.post("http://192.168.1.220:3001/userPersonaDependiente/addTo",
+        await axios.post(`http://${baseURL}:3001/userPersonaDependiente/addTo`,
             {userId: userId, personaDependienteId: personaDependienteId},
             {headers: {accessToken: token}})
             .then(() => {

@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {baseURL} from "../helpers/IPConfig";
+
 
 const AuxiliarAsignado = ({item, id}) => {
 
@@ -14,7 +16,7 @@ const AuxiliarAsignado = ({item, id}) => {
 
     const deleteUserPersonaDependiente = async (auxiliarId, id) => {
         const token = await AsyncStorage.getItem("accessToken")
-        await axios.delete("http://192.168.1.220:3001/userPersonaDependiente/delete",
+        await axios.delete(`http://${baseURL}:3001/userPersonaDependiente/delete`,
             {headers: {accessToken: token},
                 data: {
                     userId: auxiliarId,
